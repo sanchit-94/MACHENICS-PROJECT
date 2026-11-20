@@ -1,0 +1,233 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    --font-sans: "Public Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    background-color: #050914;
+    color: #f1f5f9;
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Lab instrument window surface */
+.lab-window {
+  background: linear-gradient(180deg, rgba(13, 22, 43, 0.94) 0%, rgba(9, 15, 31, 0.96) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  box-shadow: 0 24px 60px -18px rgba(2, 6, 23, 0.78);
+}
+
+.lab-subpanel {
+  background: rgba(15, 25, 48, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+/* Initial page-load slide-in keyframes */
+@keyframes labLoadSweep {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.95;
+  }
+  70% {
+    transform: scaleX(1);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes labHeaderSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes labSlideFromLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(-56px, 12px, 0) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes labSlideFromRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(56px, 12px, 0) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes labSlideFromUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.lab-load-bar {
+  transform-origin: left center;
+  animation: labLoadSweep 950ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.lab-header-enter {
+  animation: labHeaderSlideDown 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lab-hero-enter {
+  animation: labSlideFromUp 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lab-hero-slide-left {
+  animation: labSlideFromLeft 720ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+
+.lab-hero-slide-right {
+  animation: labSlideFromRight 720ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
+}
+
+/* Scroll & load-triggered window slide-in transitions */
+.window-reveal {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  transition:
+    opacity 640ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.window-reveal.is-entering {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.window-reveal.slide-from-left.is-entering {
+  transform: translate3d(-72px, 16px, 0) scale(0.985);
+}
+
+.window-reveal.slide-from-right.is-entering {
+  transform: translate3d(72px, 16px, 0) scale(0.985);
+}
+
+.window-reveal.slide-from-up.is-entering {
+  transform: translate3d(0, 48px, 0) scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-load-bar,
+  .lab-header-enter,
+  .lab-hero-enter,
+  .lab-hero-slide-left,
+  .lab-hero-slide-right {
+    animation: none !important;
+  }
+  .window-reveal {
+    transition: none !important;
+  }
+  .window-reveal.is-entering,
+  .window-reveal.slide-from-left.is-entering,
+  .window-reveal.slide-from-right.is-entering,
+  .window-reveal.slide-from-up.is-entering {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Subtle lab grid background */
+.lab-grid-bg {
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(6, 182, 212, 0.10), transparent 42%),
+    radial-gradient(circle at 85% 15%, rgba(37, 99, 235, 0.12), transparent 40%),
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+}
+
+/* Custom range inputs */
+input[type="range"].lab-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+}
+
+input[type="range"].lab-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #22d3ee;
+  border: 2px solid #082f49;
+  cursor: pointer;
+}
+
+/* KaTeX dark mode contrast */
+.katex {
+  color: #e2e8f0;
+  font-size: 1.02em;
+}
+
+/* Print / PDF Export styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only-report {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .print-only-report * {
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+  }
+  .katex {
+    color: #0f172a !important;
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Stokes' Law – Interactive 3D Virtual Physics Laboratory",
+  "description": "Experimental verification of Stokes' Law and determination of the coefficient of viscosity with real-time 3D falling-sphere physics simulation, Ladenburg corrections, regression graphs, and printable lab report.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
